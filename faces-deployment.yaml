@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faces
+  namespace: faces
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: faces
+  template:
+    metadata:
+      labels:
+        app: faces
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-secret
+      containers:
+        - name: faces
+          image: emartinez0802/tensorflow:latest
+          imagePullPolicy: Always
+          workingDir: /data
+          command: ["sleep"]
+          args: ["infinity"]
+          volumeMounts:
+            - name: faces-storage
+              mountPath: /data
+      volumes:
+        - name: faces-storage
+          persistentVolumeClaim:
+            claimName: faces-pvc
